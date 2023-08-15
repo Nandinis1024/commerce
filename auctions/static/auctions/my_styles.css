@@ -1,0 +1,28 @@
+
+body {
+    padding: 50px;
+    background-color: white;
+}
+.listing {
+    background-color: beige;
+    padding: 20px;
+    margin: 50px;
+    
+    
+}
+.img {
+    width: 400px;
+    height: 300px;
+}
+.item {
+    background-color: plum;
+    padding: 20px;
+    margin: 50px;
+}
+
+.watchlist {
+    background-color: rgb(239, 164, 189);
+    padding: 20px;
+    margin: 50px;
+
+}

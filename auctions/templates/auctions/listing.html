@@ -1,0 +1,83 @@
+{% extends "auctions/layout.html" %}
+
+
+{% block body %}
+{% if messages %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-danger{% endif %}" role="alert">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{%if not listing_data.is_active and user == listing_data.price.bid_id %}
+<div class="alert alert-primary" role="alert">
+  Congo! you have won the auction
+</div>
+{% endif %}
+
+<div class="item">
+<h1>{{ listing_data.title }}</h1>
+        <br>
+         <img class="img" src="{{ listing_data.image }}" alt=""> 
+        <br
+        <p><em>{{ listing_data.description }}</em></p>
+        <br>
+        <h2>Cost: {{ listing_data.price.bid }}</h2>
+        <br>
+        <p><b>Category:</b> {{ listing_data.category }}</p>
+        <br>
+        <p><b>Created by:</b> {{ listing_data.created_by.username }}</p>
+        {% if user.is_authenticated and listing_data.is_active %}
+
+        <form action="{% url 'watchlist' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="listing_id" value="{{ listing_data.id }}"> 
+        <button type="submit" class="btn btn-light btn-lg"><b>Add to Watchlist</b></button>
+        </form>
+        <br>
+
+        <form action="{% url 'add_bid' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="listing_id" value="{{ listing_data.id }}"> 
+        <input type="number" min="0" placeholder="Enter new bid" name="new_bid">
+        <button type="submit" class="btn btn-primary">Add Bid</button>
+        </form>
+        <hr>
+
+        {% if isowner %}
+        <form action="{% url 'close_bid' %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="listing_id" value="{{ listing_data.id }}"> 
+          <button type="submit" class="btn btn-danger">Close Bid</button>
+        </form>
+        {% endif %}
+        <hr>
+
+        <form action="{% url 'comments' %}" method="post">
+        {% csrf_token %}
+        <label> Add comments:</label><br>
+        <input type="hidden" name="listing_id" value="{{ listing_data.id }}"> 
+        <textarea style="width: 500px; height: 80px;" placeholder="Enter comments..." name="comments" rows="2" cols="10"></textarea><br> 
+        <button type="submit" class="btn btn-secondary">Submit comment</button>
+        </form><hr>
+
+        
+        <ol>
+        {% for item in comment_items %}
+        <li>
+        <em>{{ item.comment }} ~<b style="color: gray;">{{ item.comment_id.username }}</b></em>
+        </li>
+        
+        <hr>
+        {% endfor %}
+        </ol>
+        {% endif %}
+</div> 
+{% endblock %}
